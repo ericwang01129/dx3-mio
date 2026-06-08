@@ -41,10 +41,23 @@
     });
   }
 
-  /* 以 URL hash 深連結到指定畫面（#menu / #players / #npc，預設標題） */
+  /* 規則本地存檔 overlay（全視窗、不受舞台縮放） */
+  function openRules() {
+    var ov = el("rules-overlay"), fr = el("rules-frame");
+    if (fr && !fr.getAttribute("src")) fr.setAttribute("src", "rules/index.html");
+    if (ov) ov.classList.add("is-open");
+  }
+  function closeRules() {
+    var ov = el("rules-overlay");
+    if (ov) ov.classList.remove("is-open");
+  }
+
+  /* 以 URL hash 深連結到指定畫面（#menu / #players / #npc / #rules，預設標題） */
   var HASH_MAP = { menu: "view-menu", players: "view-players", npc: "view-npc" };
   function applyHash() {
     var h = (location.hash || "").replace("#", "").toLowerCase();
+    if (h === "rules") { showView("view-menu"); openRules(); return; }
+    closeRules();
     var target = HASH_MAP[h] || "view-title";
     showView(target);
     if (target === "view-players") selectChar("players", 0);
@@ -100,6 +113,9 @@
     /* —— 標題頁點擊任意處 → 選單 —— */
     el("view-title").addEventListener("click", function () { showView("view-menu"); });
 
+    /* —— 規則 overlay 返回鈕 —— */
+    el("rules-back").addEventListener("click", closeRules);
+
     /* —— 深連結支援 —— */
     applyHash();
     window.addEventListener("hashchange", applyHash);
@@ -119,9 +135,7 @@
     addMenuBtn(nav, menu.npc, "N P C", function () {
       showView("view-npc"); selectChar("npc", 0);
     });
-    addMenuBtn(nav, menu.rules, "RULES", function () {
-      if (meta.rulesUrl) window.open(meta.rulesUrl, "_blank", "noopener");
-    });
+    addMenuBtn(nav, menu.rules, "RULES", function () { openRules(); });
     addMenuBtn(nav, menu.backTitle, "TITLE", function () {
       showView("view-title");
     }, true);

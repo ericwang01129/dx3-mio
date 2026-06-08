@@ -4,6 +4,10 @@
 # 暫存截圖（驗證用）
 _shot_*.png
 
+# 爬蟲渲染快取與探查暫存（保留 crawl.py 本身）
+_crawl/dom/
+_crawl/*.html
+
 # OS / 編輯器垃圾
 Thumbs.db
 desktop.ini

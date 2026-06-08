@@ -61,6 +61,16 @@
     <div class="scanlines" aria-hidden="true"></div>
   </div>
 
+  <!-- 規則本地存檔（同源內嵌，全視窗閱讀，不受舞台縮放影響） -->
+  <div class="rules-overlay" id="rules-overlay" aria-hidden="true">
+    <div class="rules-bar">
+      <button class="rules-back" id="rules-back" type="button">← 返回選單</button>
+      <span class="rules-bar-title">規則參考 ─ RULES</span>
+      <a class="rules-open" id="rules-open" href="rules/index.html" target="_blank" rel="noopener">新分頁開啟 ↗</a>
+    </div>
+    <iframe class="rules-frame" id="rules-frame" title="DX3 規則" referrerpolicy="no-referrer"></iframe>
+  </div>
+
   <!-- 載入中 / 錯誤提示 -->
   <div class="loading" id="loading">
     <div class="loading-inner">

@@ -1,0 +1,67 @@
+/* DX3 規則本地存檔樣式 — 暗色、可嵌入 iframe */
+:root{
+  --void:#07090f; --void2:#0d111b; --panel:#121826; --surface:#1d2740;
+  --red:#e50028; --cyan:#00e5ff; --cyan-soft:#5ef1ff;
+  --text:#e6edff; --dim:#9fb0d6; --faint:#5e6b8e; --line:rgba(94,107,142,.25);
+  --zh:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;background:var(--void);color:var(--text);font-family:var(--zh);}
+a{color:var(--cyan-soft);text-decoration:none;} a:hover{text-decoration:underline;}
+
+.rules-wrap{display:flex;height:100vh;}
+
+/* 側邊導覽 */
+.rules-side{
+  flex:0 0 280px;width:280px;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,var(--void2),var(--void));
+  border-right:1px solid var(--line);padding:18px 0;
+}
+.rules-side .side-link{
+  display:block;padding:8px 14px;color:var(--dim);font-size:15px;line-height:1.5;
+  border-left:3px solid transparent;
+}
+.rules-side .side-link:hover{color:#fff;background:rgba(0,229,255,.06);text-decoration:none;}
+.rules-side .side-link.current{
+  color:var(--cyan-soft);background:rgba(0,229,255,.10);
+  border-left-color:var(--cyan);font-weight:700;
+}
+
+/* 內容 */
+.rules-main{flex:1 1 auto;height:100vh;overflow-y:auto;padding:40px 56px 80px;}
+.rules-title{
+  font-size:34px;font-weight:900;margin:0 0 24px;color:#fff;
+  padding-bottom:14px;border-bottom:2px solid var(--red);
+  text-shadow:0 0 22px rgba(229,0,40,.25);
+}
+.rules-content{max-width:920px;font-size:16.5px;line-height:1.95;color:var(--text);}
+.rules-content p{margin:0 0 15px;}
+.rules-content h1,.rules-content h2,.rules-content h3,.rules-content h4{
+  color:var(--cyan-soft);margin:30px 0 12px;line-height:1.4;font-weight:700;
+}
+.rules-content h2{font-size:24px;} .rules-content h3{font-size:20px;} .rules-content h4{font-size:18px;}
+.rules-content ul,.rules-content ol{margin:0 0 16px;padding-left:26px;}
+.rules-content li{margin:4px 0;}
+.rules-content img{max-width:100%;height:auto;border-radius:6px;margin:10px 0;}
+.rules-content a{border-bottom:1px dotted rgba(94,240,255,.4);}
+.rules-content table{border-collapse:collapse;margin:16px 0;width:100%;font-size:15px;}
+.rules-content th,.rules-content td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top;}
+.rules-content th{background:var(--surface);color:var(--cyan-soft);}
+.rules-content blockquote{
+  margin:16px 0;padding:10px 20px;border-left:4px solid var(--red);
+  background:rgba(229,0,40,.08);color:#fff;
+}
+.rules-content hr{border:none;border-top:1px solid var(--line);margin:24px 0;}
+.rules-src{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--faint);font-size:13px;}
+
+/* 捲軸 */
+.rules-side::-webkit-scrollbar,.rules-main::-webkit-scrollbar{width:10px;}
+.rules-side::-webkit-scrollbar-thumb,.rules-main::-webkit-scrollbar-thumb{background:var(--surface);border-radius:5px;}
+.rules-side::-webkit-scrollbar-track,.rules-main::-webkit-scrollbar-track{background:transparent;}
+
+/* 窄寬度（iframe 較小時）收合側欄為頂部橫向 */
+@media (max-width:720px){
+  .rules-wrap{flex-direction:column;}
+  .rules-side{flex:none;width:100%;height:auto;max-height:38vh;border-right:none;border-bottom:1px solid var(--line);}
+  .rules-main{height:auto;padding:24px 18px 60px;}
+}
