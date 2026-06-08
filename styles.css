@@ -1,0 +1,435 @@
+/* =========================================================
+   DX3-mio iframe 主頁 — 樣式
+   設計座標系：固定 2560 × 1440（所有尺寸以此為基準，px）
+   主題取自 dx3-overed-ui.css（Renegade 紅 / Tech 青 / void 黑）
+   ========================================================= */
+
+:root {
+  /* —— 色票 —— */
+  --void:      #07090f;
+  --void-2:    #0d111b;
+  --panel:     #121826;
+  --panel-2:   #182036;
+  --surface:   #1d2740;
+  --red:       #e50028;
+  --red-glow:  #ff3358;
+  --cyan:      #00e5ff;
+  --cyan-soft: #5ef1ff;
+  --violet:    #a855f7;
+  --amber:     #ffb020;
+  --text:      #e6edff;
+  --text-dim:  #9fb0d6;
+  --text-faint:#5e6b8e;
+
+  /* —— 字型 —— */
+  --font-display: "Orbitron", "Rajdhani", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  --font-body:    "Rajdhani", "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", "Segoe UI", sans-serif;
+  --font-zh:      "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+
+  /* —— 前景主角（28_5）位置，可自由微調 —— */
+  --hero-right:  90px;
+  --hero-bottom: 0px;
+  --hero-height: 1040px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: var(--void);            /* letterbox 黑邊 */
+  overflow: hidden;
+  font-family: var(--font-body);
+  color: var(--text);
+}
+
+/* ---------- 固定舞台：由 app.js 設定 transform 等比縮放置中 ---------- */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2560px;
+  height: 1440px;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) scale(1);
+  background: var(--void);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ======================= 背景層 ======================= */
+.bg-layer {
+  position: absolute; inset: 0;
+  background: url("assets/260528.png") center 22% / cover no-repeat;
+  z-index: 1;
+}
+/* 暗色壓暗：左側更暗利於標題可讀 + 徑向暈影 + 底部紅暈 */
+.bg-overlay {
+  position: absolute; inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(125% 85% at 62% 38%, rgba(7,9,15,.12), rgba(7,9,15,.86) 100%),
+    linear-gradient(90deg, rgba(7,9,15,.88) 0%, rgba(7,9,15,.42) 42%, rgba(7,9,15,.50) 100%),
+    linear-gradient(0deg, rgba(229,0,40,.12), rgba(7,9,15,0) 32%);
+}
+
+/* ======================= view 共通：淡入淡出切換 ======================= */
+.view {
+  position: absolute; inset: 0;
+  z-index: 5;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition: opacity .55s ease, transform .55s ease, visibility 0s linear .55s;
+  pointer-events: none;
+}
+.view.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .55s ease, transform .55s ease, visibility 0s;
+  pointer-events: auto;
+}
+
+/* 角色頁額外加一層壓暗，確保文字可讀 */
+.view-chars::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(7,9,15,.55) 0%, rgba(7,9,15,.30) 30%, rgba(7,9,15,.82) 72%);
+  z-index: -1;
+}
+
+/* ======================= 共用文字元件 ======================= */
+.tagline {
+  font-family: var(--font-display);
+  font-size: 30px;
+  letter-spacing: .42em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+.dx3-subtitle {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--cyan-soft);
+  text-shadow: 0 0 18px rgba(0,229,255,.45);
+}
+.dx3-subtitle.right { text-align: right; }
+
+/* ======================= 標題畫面 ======================= */
+.title-block {
+  position: absolute;
+  left: 180px;
+  bottom: 300px;
+}
+.title-block .tagline { margin-bottom: 16px; }
+.title-block .dx3-subtitle { margin-bottom: 26px; }
+
+.title-main {
+  font-family: var(--font-zh);
+  font-weight: 900;
+  font-size: 150px;
+  line-height: 1.04;
+  color: var(--text);
+  letter-spacing: .03em;
+  text-shadow: 0 0 30px rgba(7,9,15,.9), 0 6px 26px rgba(0,0,0,.8);
+}
+.title-sub {
+  font-family: var(--font-zh);
+  font-weight: 500;
+  font-size: 86px;
+  line-height: 1.1;
+  margin-top: 10px;
+  color: var(--text-dim);
+  letter-spacing: .04em;
+  text-shadow: 0 0 22px rgba(7,9,15,.9), 0 4px 18px rgba(0,0,0,.8);
+}
+/* 大標左側 Renegade 紅條 */
+.title-block::before {
+  content: "";
+  position: absolute;
+  left: -42px; top: 118px; bottom: 8px;
+  width: 8px;
+  background: linear-gradient(180deg, var(--red-glow), var(--red));
+  box-shadow: 0 0 24px rgba(229,0,40,.7);
+}
+
+.hero-foreground {
+  position: absolute;
+  right: var(--hero-right);
+  bottom: var(--hero-bottom);
+  height: var(--hero-height);
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.6));
+}
+.hero-foreground img { height: 100%; width: auto; display: block; }
+
+.click-hint {
+  position: absolute;
+  left: 50%; bottom: 150px;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 30px;
+  letter-spacing: .4em;
+  color: var(--text-dim);
+  text-transform: none;
+  animation: hint-pulse 2.2s ease-in-out infinite;
+}
+.click-hint::before, .click-hint::after {
+  content: "—"; margin: 0 22px; color: var(--red-glow);
+}
+@keyframes hint-pulse { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+
+/* 標題頁：滑鼠提示可點 */
+#view-title.is-active { cursor: pointer; }
+
+/* ======================= 主選單 ======================= */
+.menu-head {
+  position: absolute;
+  right: 180px; top: 150px;
+  text-align: right;
+}
+.menu-head .tagline { margin-bottom: 12px; }
+
+.main-menu {
+  position: absolute;
+  right: 180px; top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 34px;
+}
+.menu-item {
+  position: relative;
+  font-family: var(--font-zh);
+  font-weight: 700;
+  font-size: 58px;
+  letter-spacing: .12em;
+  color: var(--text-dim);
+  background: none; border: none;
+  cursor: pointer;
+  padding: 10px 30px 10px 46px;
+  text-align: right;
+  transition: color .25s ease, transform .25s ease, text-shadow .25s ease;
+}
+.menu-item::before {
+  content: "";
+  position: absolute;
+  right: 0; bottom: -2px;
+  width: 0; height: 4px;
+  background: linear-gradient(90deg, transparent, var(--red-glow));
+  box-shadow: 0 0 16px rgba(229,0,40,.8);
+  transition: width .28s ease;
+}
+.menu-item:hover, .menu-item:focus-visible {
+  color: #fff;
+  transform: translateX(-18px);
+  text-shadow: 0 0 26px rgba(255,51,88,.7);
+  outline: none;
+}
+.menu-item:hover::before, .menu-item:focus-visible::before { width: 120px; }
+.menu-item .mi-en {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 19px;
+  letter-spacing: .34em;
+  color: var(--text-faint);
+  margin-top: 4px;
+}
+.menu-item.is-back { font-size: 44px; color: var(--text-faint); margin-top: 16px; }
+
+/* ======================= 角色頁（玩家 / NPC） ======================= */
+.char-tab {
+  position: absolute;
+  left: 1010px; top: 150px;
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: .3em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+.char-tab::before {
+  content: "";
+  display: inline-block;
+  width: 60px; height: 2px;
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(0,229,255,.7);
+  vertical-align: middle;
+  margin-right: 20px;
+}
+
+/* 立繪 */
+.char-art {
+  position: absolute;
+  left: 90px; bottom: 0; top: 70px;
+  width: 880px;
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 1;
+}
+.char-art img {
+  max-height: 100%; max-width: 100%;
+  width: auto; object-fit: contain; object-position: bottom;
+  filter: drop-shadow(0 20px 44px rgba(0,0,0,.65));
+  animation: art-in .6s ease both;
+}
+@keyframes art-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+/* 立繪待補佔位 */
+.art-empty {
+  width: 560px; height: 1080px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px;
+  border: 2px dashed rgba(94,107,142,.5);
+  background:
+    repeating-linear-gradient(135deg, rgba(29,39,64,.25) 0 22px, rgba(13,17,27,.25) 22px 44px);
+  color: var(--text-faint);
+  font-family: var(--font-display);
+  letter-spacing: .25em;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), calc(100% - 26px) 100%, 0 100%);
+}
+.art-empty .ae-zh { font-family: var(--font-zh); font-size: 34px; letter-spacing: .3em; }
+.art-empty .ae-en { font-size: 20px; letter-spacing: .4em; }
+
+/* 詳情面板 */
+.char-detail {
+  position: absolute;
+  left: 1010px; top: 232px;
+  width: 1010px;
+  z-index: 2;
+}
+.char-tags {
+  display: flex; gap: 16px; margin-bottom: 22px; flex-wrap: wrap;
+}
+.char-tag {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: .12em;
+  color: var(--cyan-soft);
+  padding: 7px 22px;
+  background: rgba(0,229,255,.07);
+  border: 1px solid rgba(0,229,255,.4);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.char-furigana {
+  font-family: var(--font-zh);
+  font-size: 30px;
+  letter-spacing: .3em;
+  color: var(--text-faint);
+  margin-bottom: 2px;
+}
+.char-name {
+  font-family: var(--font-zh);
+  font-weight: 900;
+  font-size: 120px;
+  line-height: 1.05;
+  color: var(--text);
+  letter-spacing: .04em;
+  text-shadow: 0 0 30px rgba(0,0,0,.7);
+}
+.char-motto {
+  margin: 30px 0 36px;
+  padding: 22px 34px;
+  font-family: var(--font-zh);
+  font-size: 40px;
+  line-height: 1.4;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(229,0,40,.16), rgba(7,9,15,0));
+  border-left: 6px solid var(--red);
+  box-shadow: inset 0 0 40px rgba(229,0,40,.12);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+}
+.char-intro {
+  font-family: var(--font-zh);
+  font-weight: 400;
+  font-size: 31px;
+  line-height: 1.85;
+  color: var(--text-dim);
+  max-width: 980px;
+}
+.char-intro p { margin-bottom: 18px; }
+.char-intro p:last-child { margin-bottom: 0; }
+
+/* 右側子選單（切換角色 + 返回） */
+.char-submenu {
+  position: absolute;
+  right: 130px; top: 320px;
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 26px;
+  z-index: 3;
+}
+.submenu-item {
+  position: relative;
+  font-family: var(--font-zh);
+  font-weight: 700;
+  font-size: 40px;
+  letter-spacing: .1em;
+  color: var(--text-faint);
+  background: none; border: none;
+  cursor: pointer;
+  padding: 6px 8px 6px 40px;
+  text-align: right;
+  transition: color .25s ease, transform .25s ease, text-shadow .25s ease;
+}
+.submenu-item::before {
+  content: "";
+  position: absolute; right: -2px; bottom: -2px;
+  width: 0; height: 3px;
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(0,229,255,.8);
+  transition: width .25s ease;
+}
+.submenu-item:hover, .submenu-item.is-current {
+  color: #fff;
+  text-shadow: 0 0 22px rgba(0,229,255,.6);
+}
+.submenu-item.is-current { color: var(--cyan-soft); }
+.submenu-item:hover::before, .submenu-item.is-current::before { width: 90px; }
+.submenu-item.is-back {
+  margin-top: 22px;
+  font-size: 34px;
+  color: var(--text-faint);
+}
+.submenu-item.is-back::before { background: var(--red-glow); box-shadow: 0 0 12px rgba(229,0,40,.8); }
+
+/* ======================= 掃描線 CRT overlay ======================= */
+.scanlines {
+  position: absolute; inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: .35;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,229,255,.05) 0px,
+    rgba(0,229,255,.05) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+/* ======================= 載入 / 錯誤 ======================= */
+.loading {
+  position: fixed; inset: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--void);
+  transition: opacity .4s ease;
+}
+.loading.is-hidden { opacity: 0; pointer-events: none; }
+.loading-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.loading-spinner {
+  width: 46px; height: 46px;
+  border: 3px solid rgba(0,229,255,.2);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text {
+  font-family: var(--font-display);
+  font-size: 20px; letter-spacing: .4em; color: var(--cyan-soft);
+  text-align: center; max-width: 80vw; line-height: 1.8;
+}
+.loading.is-error .loading-spinner { display: none; }
+.loading.is-error .loading-text { color: var(--red-glow); letter-spacing: .1em; }

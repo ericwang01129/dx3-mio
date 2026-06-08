@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ダブルクロス The 3rd Edition — dx3-mio</title>
+  <meta name="description" content="DX3 跑團主頁 — iframe 嵌入用 (2560×1440)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 固定 2560×1440 舞台；由 app.js 等比縮放置中，非 16:9 自動 letterbox -->
+  <div class="stage" id="stage" aria-live="polite">
+
+    <!-- 背景層 + 暗色壓暗 overlay -->
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- ===================== 標題畫面 ===================== -->
+    <section class="view view-title is-active" id="view-title">
+      <div class="title-block">
+        <p class="tagline" id="t-tagline"></p>
+        <p class="dx3-subtitle" id="t-subtitle"></p>
+        <h1 class="title-main" id="t-title1"></h1>
+        <h2 class="title-sub" id="t-title2"></h2>
+      </div>
+      <div class="hero-foreground" aria-hidden="true">
+        <img id="hero-img" src="assets/28_5.png" alt="">
+      </div>
+      <div class="click-hint" id="t-hint"></div>
+    </section>
+
+    <!-- ===================== 主選單 ===================== -->
+    <section class="view view-menu" id="view-menu">
+      <div class="menu-head">
+        <p class="tagline" id="m-tagline"></p>
+        <p class="dx3-subtitle right" id="m-subtitle"></p>
+      </div>
+      <nav class="main-menu" id="main-menu"><!-- app.js 注入 --></nav>
+    </section>
+
+    <!-- ===================== 玩家角色 ===================== -->
+    <section class="view view-chars" id="view-players">
+      <div class="char-tab" id="players-tab"></div>
+      <div class="char-art" id="players-art"></div>
+      <div class="char-detail" id="players-detail"></div>
+      <nav class="char-submenu" id="players-menu"></nav>
+    </section>
+
+    <!-- ===================== 登場 NPC ===================== -->
+    <section class="view view-chars" id="view-npc">
+      <div class="char-tab" id="npc-tab"></div>
+      <div class="char-art" id="npc-art"></div>
+      <div class="char-detail" id="npc-detail"></div>
+      <nav class="char-submenu" id="npc-menu"></nav>
+    </section>
+
+    <!-- 掃描線 CRT overlay（最上層、不擋互動） -->
+    <div class="scanlines" aria-hidden="true"></div>
+  </div>
+
+  <!-- 載入中 / 錯誤提示 -->
+  <div class="loading" id="loading">
+    <div class="loading-inner">
+      <span class="loading-spinner"></span>
+      <span class="loading-text" id="loading-text">LOADING…</span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

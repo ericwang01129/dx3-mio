@@ -1,0 +1,11 @@
+# Claude Code 本地設定（機器專屬，不發佈）
+.claude/
+
+# 暫存截圖（驗證用）
+_shot_*.png
+
+# OS / 編輯器垃圾
+Thumbs.db
+desktop.ini
+.DS_Store
+*.tmp
