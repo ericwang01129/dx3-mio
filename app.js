@@ -129,6 +129,9 @@
     var nav = el("main-menu");
     nav.innerHTML = "";
 
+    addMenuBtn(nav, menu.gameStart || "進入場景", "game start", function () {
+      runFoundryMacro(menu.gameStartMacro || menu.gameStart || "進入場景");
+    });
     addMenuBtn(nav, menu.players, "PLAYER", function () {
       showView("view-players"); selectChar("players", 0);
     });
@@ -139,6 +142,53 @@
     addMenuBtn(nav, menu.backTitle, "TITLE", function () {
       showView("view-title");
     }, true);
+
+    /* 讓最上方項目維持「原本玩家角色」所在位置：選單為垂直置中錨定，
+       多一項會使整體上移，故往下平移「一項高度＋間距」的一半作補償。 */
+    keepFirstItemFixed(nav);
+  }
+
+  /* 多加一項後，把垂直置中的選單往下平移半項，使最上方項目（進入場景）
+     落在原本首項（玩家角色）的位置，其餘項目順勢往下平移。 */
+  function keepFirstItemFixed(nav) {
+    function apply() {
+      var item = nav.querySelector(".menu-item:not(.is-back)");
+      if (!item) return;
+      var cs = getComputedStyle(nav);
+      var gap = parseFloat(cs.rowGap || cs.gap) || 34;
+      var shift = (item.offsetHeight + gap) / 2;
+      nav.style.transform = "translateY(calc(-50% + " + shift + "px))";
+    }
+    apply();
+    /* 字型非同步載入後尺寸可能微調，待字型就緒再校正一次 */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+  }
+
+  /* —— 進入場景：透過 html-to-scene 注入的全域 FoundryVTT 橋接，叫 Foundry 執行指定 macro。
+     需在 html-to-scene 模組開啟「Two-way communication helpers」，
+     iframe 才會被注入 FoundryVTT（= FoundryVTTAccess）物件，經由它取得 game 與 Foundry API。 */
+  function runFoundryMacro(macroName) {
+    if (!macroName) return;
+    var tries = 0;
+    (function attempt() {
+      var F = window.FoundryVTT;
+      if (F && F.game && F.game.macros) {
+        try {
+          var macro = F.game.macros.getName(macroName);
+          if (macro) macro.execute();
+          else console.warn('[dx3-mio] 找不到名為「' + macroName + '」的 macro。');
+        } catch (e) {
+          console.error('[dx3-mio] 執行 macro 失敗：', e);
+        }
+        return;
+      }
+      if (tries++ < 40) {            // 橋接物件依 updateRate 注入，最多等約 8 秒
+        setTimeout(attempt, 200);
+      } else {
+        console.warn('[dx3-mio] 未偵測到 FoundryVTT 橋接物件；' +
+          '請確認本頁經由 html-to-scene 嵌入，且已開啟 Two-way communication helpers。');
+      }
+    })();
   }
 
   function addMenuBtn(nav, label, en, onClick, isBack) {

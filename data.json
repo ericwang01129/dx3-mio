@@ -8,6 +8,8 @@
     "rulesUrl": "https://sites.google.com/site/doublecross3rd/向著日常的內側"
   },
   "menu": {
+    "gameStart": "進入場景",
+    "gameStartMacro": "進入場景",
     "players": "玩家角色",
     "npc": "登場NPC",
     "rules": "規則參考",

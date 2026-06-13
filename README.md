@@ -23,6 +23,8 @@ DX3（ダブルクロス The 3rd Edition）跑團主頁。固定設計畫素 **2
 - `players[]`：玩家角色。`name / furigana / tags / motto / intro / image`。
 - `npcs[]`：登場 NPC（已預留 6 位）。`image` 留空會顯示「立繪待補」佔位框；補圖時把 `image` 指向 `assets/檔名.png`。
 - `intro` 內以**空白行**分段。
+- `menu.gameStart`：主選單第一項「進入場景」的按鈕文字。
+- `menu.gameStartMacro`：點「進入場景」時要在 Foundry VTT 執行的 macro 名稱（見下方〈進入場景〉）。
 
 > 立繪/前景主角位置可在 `styles.css` 頂部 `:root` 的 `--hero-*` 變數微調。
 
@@ -39,6 +41,17 @@ python _crawl/crawl.py     # headless Edge 渲染各頁 → 重新產生 rules/*
 ### 深連結（直接開到指定畫面）
 網址加 hash 可直接開到對應畫面，方便分享或在 iframe 中指定起始頁：
 `#menu`（主選單）、`#players`（玩家角色）、`#npc`（登場 NPC）、`#rules`（規則）；無 hash 則為標題畫面。
+
+### 進入場景（Foundry VTT 連動）
+主選單第一項「進入場景 / game start」會叫 Foundry VTT 執行指定 macro，供本頁以 [html-to-scene](https://github.com/Javiondox/html-to-scene) 模組嵌入場景時使用。
+
+- 點擊後透過注入的全域 `FoundryVTT` 物件執行 `FoundryVTT.game.macros.getName(<名稱>).execute()`。
+- macro 名稱在 `data.json` 的 `menu.gameStartMacro`（預設 `進入場景`）；按鈕文字為 `menu.gameStart`。
+- **前置需求**：html-to-scene 須開啟 **Two-way communication helpers**，iframe 才會被注入 `FoundryVTT` 物件；且 Foundry 世界內需有同名 macro。
+- 找不到橋接物件時（例如於一般瀏覽器、或未開啟 helpers）會輪詢約 8 秒後在 console 警告，不影響其餘畫面與選單。
+- 此項以 `keepFirstItemFixed()` 往下平移半項補償垂直置中，使最上方項目維持原本「玩家角色」的位置。
+
+> 參考：html-to-scene 的 [Two-way communication helpers](https://github.com/Javiondox/html-to-scene/wiki/Two-way-communication-helpers) 與 [Hooks](https://github.com/Javiondox/html-to-scene/wiki/Hooks)。
 
 ## 本地預覽
 `fetch('data.json')` 需要 http（直接 `file://` 開會被瀏覽器擋）。於專案目錄擇一執行：
